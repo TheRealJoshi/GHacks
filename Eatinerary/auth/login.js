@@ -14,7 +14,7 @@ import {
 } from "react-native-responsive-screen";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword} from "firebase/auth";
 import  {app } from './../config'
 
 
@@ -168,7 +168,7 @@ function LoginScreen({ navigation }) {
         const user = userCredential.user;
         console.log("User signed in:", user);
         // Navigate to the Profile page or handle the successful login
-        navigation.navigate('Profile', { userId: user.uid });
+        navigation.navigate("Home");
       })
       .catch((error) => {
         // Handle Errors here.
@@ -177,25 +177,6 @@ function LoginScreen({ navigation }) {
         console.log("Error signing in:", errorCode, errorMessage);
       });
   };
-
-  const handleRegister = () => {
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // User was created successfully.
-        console.log("User registered:", userCredential.user);
-        // You might want to redirect the user to a profile page or home screen here.
-        navigation.navigate('Profile', { userId: userCredential.user.uid });
-      })
-      .catch((error) => {
-        // Handle errors here, such as email already in use.
-        console.error("Registration error:", error.code, error.message);
-        // Optionally update the UI to show error messages
-      });
-  };
-
-  
-
 
   return (
     <View style={styles.container}>
@@ -241,12 +222,12 @@ function LoginScreen({ navigation }) {
             
           </View>
         </TouchableOpacity> */}
-        <View style={styles.haveAccountContainer}>
+         <View style={styles.haveAccountContainer}>
           <Text style={styles.haveAccountText}>Don't have an account?</Text>
           {/* TODO: add navigation register */}
           <TouchableOpacity
             activeOpacity={1}
-            onPress={handleRegister}
+            onPress={() => navigation.navigate("Register")}
           > 
             <Text style={styles.registerText}>Register</Text>
           </TouchableOpacity>

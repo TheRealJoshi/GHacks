@@ -85,7 +85,7 @@ export default function App() {
   // if (initializing) return null;
 
 
-  var authState = false;
+  var authState = true;
 
   return (
     authState ? (
@@ -99,6 +99,7 @@ export default function App() {
           <AuthNav.Screen name="Splash" component={Splash} />
           <AuthNav.Screen name="Login" component={Login} />
           <AuthNav.Screen name="Register" component={Register} />
+          <AuthNav.Screen name="Home" component={Home} />
         </AuthNav.Navigator>
       </NavigationContainer>
     ) : (
