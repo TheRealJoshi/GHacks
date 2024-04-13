@@ -9,20 +9,20 @@ import {
   LayoutAnimation,
 } from "react-native";
 console.disableYellowBox=true
+
+import { themecolor } from './../config'
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
   return (
     <View style={styles.container}>
       <View style={styles.SVGcontainer}>
-        {/* <Image
-          source={require("./logo.png")}
-          style={{ width: 430, height: 259 }}
-        /> */}
+        <Image
+          source={require("./1.png")}
+          style={{ width: 340, height: 190 }}
+        />
+        <Text style={styles.subtext}>Eat Fast. Work Fast. Live Fast.</Text>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>Welcome to Eatinerary</Text>
-        <Text style={styles.subtext}>eat fast. work fast. live fast</Text>
-      </View>
+      
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.registerButton}
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
   },
   registerButton: {
-    backgroundColor: "#342822",
+    backgroundColor: `${themecolor}`,
     width: 271,
     height: 58,
     borderRadius: 7,
@@ -83,25 +83,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 0.3,
     padding: 30,
-    top: 0,
+    top: 80,
   },
   subtext: {
     color: "#5A5A5A",
     fontFamily: "Avenir",
     fontSize: 18,
     textAlign: "center",
-    top: 30,
+    // top: 10,
   },
   title: {
     fontFamily: "Avenir",
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
+    color: '#342822'
   },
   textContainer: {
     flex: 0.15,
-    padding: 10,
-    top: 15,
+    // top: 15,
   },
   SVGcontainer: {
     flex: 0.5,
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    top: 20,
     backgroundColor: "#fff",
   },
 });

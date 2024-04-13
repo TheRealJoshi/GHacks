@@ -12,6 +12,8 @@ import {
   Ionicons
 } from "@expo/vector-icons";
 
+
+
 import Home from './pages/home';
 import Settings from './pages/settings';
 import Registration from './pages/registration';
@@ -28,9 +30,8 @@ const RegistrationNav = createStackNavigator();
 const SettingsNav = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
-const tabcolor = "#fff";
-const inactiveColor = '#8E8E8E';
-const themecolor = '#342822';
+import {tabcolor, inactiveColor, themecolor} from './config'
+
 
 function HomeStack() {
   return (
@@ -87,7 +88,7 @@ export default function App() {
   var authState = false;
 
   return (
-    true ? (
+    authState ? (
       // User logged in -> tab navigator
       <NavigationContainer>
         <AuthNav.Navigator
