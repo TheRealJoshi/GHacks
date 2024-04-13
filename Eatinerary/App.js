@@ -85,7 +85,7 @@ export default function App() {
   // if (initializing) return null;
 
 
-  var authState = true;
+  var authState = false;
 
   return (
     authState ? (
