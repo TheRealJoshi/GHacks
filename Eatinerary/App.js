@@ -1,0 +1,196 @@
+import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import React, { useState, useEffect } from 'react'
+import { StatusBar } from 'expo-status-bar';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import {
+  Entypo,
+  MaterialCommunityIcons,
+  FontAwesome5,
+  Ionicons
+} from "@expo/vector-icons";
+
+import Home from './pages/home';
+import Settings from './pages/settings';
+import Registration from './pages/registration';
+import Notifications from './pages/notifications';
+import Profile from './pages/profile';
+
+import Login from './auth/login';
+import Register from './auth/register';
+import Splash from './auth/splash';
+
+const HomeNav = createStackNavigator();
+const AuthNav = createStackNavigator();
+const RegistrationNav = createStackNavigator();
+const SettingsNav = createStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
+
+const tabcolor = "#fff";
+const inactiveColor = '#8E8E8E';
+const themecolor = '#342822';
+
+function HomeStack() {
+  return (
+    <HomeNav.Navigator>
+      <HomeNav.Screen name="Home" component={Home} />
+      <HomeNav.Screen name="Notifications" component={Notifications} />
+      <HomeNav.Screen name="Profile" component={Profile} />
+      <HomeNav.Screen name="Settings" component={Settings} />
+    </HomeNav.Navigator>
+  );
+}
+
+function MapStack() {
+  return (
+    <RegistrationNav.Navigator>
+      <RegistrationNav.Screen name="Registration" component={Registration} />
+    </RegistrationNav.Navigator>
+  );
+}
+
+function RegistrationStack() {
+  return (
+    <RegistrationNav.Navigator>
+      <RegistrationNav.Screen name="Registration" component={Registration} />
+    </RegistrationNav.Navigator>
+  );
+}
+
+function SettingsStack() {
+  return (
+    <SettingsNav.Navigator>
+      <SettingsNav.Screen name="Settings" component={Settings} />
+    </SettingsNav.Navigator>
+  );
+}
+
+export default function App() {
+  // const [initializing, setInitializing] = useState(true);
+  // const [user, setUser] = useState(); // Handle user state changes
+
+  // function onAuthStateChanged(user) {
+  //   setUser(user);
+  //   if (initializing) setInitializing(false);
+  // }
+
+  // useEffect(() => {
+  //   const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+  //   return subscriber; // unsubscribe on unmount
+  // }, []);
+
+  // if (initializing) return null;
+
+
+  var authState = false;
+
+  return (
+    true ? (
+      // User logged in -> tab navigator
+      <NavigationContainer>
+        <AuthNav.Navigator
+        screenOptions={{
+          headerShown:false
+        }}
+        >
+          <AuthNav.Screen name="Splash" component={Splash} />
+          <AuthNav.Screen name="Login" component={Login} />
+          <AuthNav.Screen name="Register" component={Register} />
+        </AuthNav.Navigator>
+      </NavigationContainer>
+    ) : (
+      // User logged out -> bottom tab navigator
+      <NavigationContainer>
+        <Tab.Navigator screenOptions={{
+          headerShown:false
+        }}
+      
+      initialRouteName="Home"
+        sceneAnimationEnabled="true"
+        activeColor={tabcolor}
+        inactiveColor={inactiveColor}
+        barStyle={{ backgroundColor: `${themecolor}`, bottomPadding: 10 }}
+        shifting={true}
+      >
+          <Tab.Screen name="Home" component={HomeStack} 
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Entypo
+                name="home"
+                size={23}
+                color={focused ? tabcolor : inactiveColor}
+              />
+            ),
+          }}
+          />
+          <Tab.Screen name="Map" component={MapStack} 
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome5
+                name="map-marked-alt"
+                size={23}
+                color={focused ? tabcolor : inactiveColor}
+              />
+            ),
+          }}
+          />
+          <Tab.Screen name="Chat" component={RegistrationStack} 
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Entypo
+                name="chat"
+                size={23}
+                color={focused ? tabcolor : inactiveColor}
+              />
+            ),
+          }}
+          />
+          <Tab.Screen name="Settings" component={SettingsStack} 
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <Ionicons
+                  name="settings-sharp"
+                  size={23}
+                  color={focused ? tabcolor : inactiveColor}
+                />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    )
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+// import { StatusBar } from 'expo-status-bar';
+// import { StyleSheet, Text, View } from 'react-native';
+
+// export default function Login() {
+//     return (
+//       <View style={styles.container}>
+//         <Text>Open up App.js to start working on your app!</Text>
+//         <StatusBar style="auto" />
+//       </View>
+//     );
+//   }
+  
+//   const styles = StyleSheet.create({
+//     container: {
+//       flex: 1,
+//       backgroundColor: '#fff',
+//       alignItems: 'center',
+//       justifyContent: 'center',
+//     },
+//   });
+  
