@@ -51,16 +51,16 @@ export default function Chat() {
             const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
             const chat = model.startChat({
-                // history: [
-                //   {
-                //     role: "user",
-                //     parts: [{ text: "Hello, I have 2 dogs in my house." }],
-                //   },
-                //   {
-                //     role: "model",
-                //     parts: [{ text: "Great to meet you. What would you like to know?" }],
-                //   },
-                // ],
+                history: [
+                  {
+                    role: "user",
+                    parts: [{ text: "Hello, I have 2 dogs in my house." }],
+                  },
+                  {
+                    role: "model",
+                    parts: [{ text: "Great to meet you. What would you like to know?" }],
+                  },
+                ],
                 messages,
                 generationConfig: {
                   maxOutputTokens: 100,
@@ -76,7 +76,7 @@ export default function Chat() {
               setCounter(counter + 1);
               console.log("responses length is " + messages.length);
               const struct = [{
-                _id: counter,
+                _id: Math.random().toString(36).substring(7),
                 text: text,
                 createdAt: new Date(),
                 user: {

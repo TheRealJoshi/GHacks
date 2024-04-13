@@ -52,10 +52,10 @@ function MapStack() {
   );
 }
 
-function RegistrationStack() {
+function ChatStack() {
   return (
     <RegistrationNav.Navigator>
-      <RegistrationNav.Screen name="Registration" component={Registration} />
+      <RegistrationNav.Screen name="Chat Stack" component={Registration} />
     </RegistrationNav.Navigator>
   );
 }
@@ -85,7 +85,7 @@ export default function App() {
   // if (initializing) return null;
 
 
-  var authState = false;
+  var authState = true;
 
   return (
     authState ? (
@@ -108,14 +108,14 @@ export default function App() {
           headerShown:false
         }}
       
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
         sceneAnimationEnabled="true"
         activeColor={tabcolor}
         inactiveColor={inactiveColor}
         barStyle={{ backgroundColor: `${themecolor}`, bottomPadding: 10 }}
         shifting={true}
       >
-          <Tab.Screen name="Home" component={HomeStack} 
+          <Tab.Screen name="HomeStack" component={HomeStack} 
           options={{
             tabBarIcon: ({ focused }) => (
               <Entypo
@@ -137,7 +137,7 @@ export default function App() {
             ),
           }}
           />
-          <Tab.Screen name="Chat" component={RegistrationStack} 
+          <Tab.Screen name="Chat" component={ChatStack} 
           options={{
             tabBarIcon: ({ focused }) => (
               <Entypo
@@ -148,7 +148,7 @@ export default function App() {
             ),
           }}
           />
-          <Tab.Screen name="Settings" component={SettingsStack} 
+          <Tab.Screen name="Settings Stack" component={SettingsStack} 
             options={{
               tabBarIcon: ({ focused }) => (
                 <Ionicons
