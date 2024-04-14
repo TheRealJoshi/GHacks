@@ -117,7 +117,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCgc2U0uaEHn70aTUGbnL0KnOgsSG7wst8';
         }}
         title="Next spot"
         description="Work"
-        // image={require('../assets/current.png')}
+        image={require('./map.png')}
         />
         
         <MapViewDirections

@@ -25,7 +25,10 @@ const AuthNav = createStackNavigator();
 const RegistrationNav = createStackNavigator();
 const SettingsNav = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
+// import { AuthProvider, useAuth } from "./pages/context";
+
 import {tabcolor, inactiveColor, themecolor} from './config'
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 function HomeStack() {
   return (
@@ -60,23 +63,29 @@ function SettingsStack() {
 }
 export default function App() {
   // const [initializing, setInitializing] = useState(true);
-  // const [user, setUser] = useState(); // Handle user state changes
+  const [user, setUser] = useState(false); // Handle user state changes
   // function onAuthStateChanged(user) {
   //   setUser(user);
   //   if (initializing) setInitializing(false);
   // }
-  // useEffect(() => {
-  //   const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
+  const auth = getAuth();
+  useEffect(() => {
+    const subscriber = onAuthStateChanged(auth, async (user) => {
+      if (user){
+        setUser(user);
+      } else {
+        console.log("user is signed out")
+      }
+    });
+    return () => subscriber(); // unsubscribe on unmount
+  }, [user]);
   // if (initializing) return null;
 
-
-  // var authState = true;
-  var authState = false;
+  var authState = true;
+  // var authState =  useAuth();
 
   return (
-    authState ? (
+    !user ? (
       // User logged in -> tab navigator
       <NavigationContainer>
         <AuthNav.Navigator

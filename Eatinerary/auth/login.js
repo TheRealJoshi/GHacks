@@ -16,8 +16,8 @@ import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword} from "firebase/auth";
 import  {app } from './../config'
-
-import {tabcolor, inactiveColor, themecolor} from './../config';
+// import { useAuth } from "./../pages/context"
+import {tabcolor, inactiveColor, themecolor} from './../pages/context';
 import apiCalendar from 'react-google-calendar-api';
 
 
@@ -34,7 +34,7 @@ import apiCalendar from 'react-google-calendar-api';
 // 	iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
 // 	scopes: ['profile', 'email'],
 // });
-
+// const { setLoggedInUser } = useAuth();
 
 
 
@@ -172,7 +172,8 @@ function LoginScreen({ navigation }) {
         const user = userCredential.user;
         console.log("User signed in:", user);
         // Navigate to the Profile page or handle the successful login
-        navigation.navigate("Profile");
+        // navigation.navigate("Profile");
+        // setLoggedInUser(res.user);
       })      
       .catch((error) => {
         // Handle Errors here.
