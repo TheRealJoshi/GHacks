@@ -1,26 +1,73 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, version } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import  { GoogleGenerativeAI } from "@google/generative-ai"
 import { GiftedChat } from 'react-native-gifted-chat'
+import dataset from './dataset'
 
 export default function Chat() {
   const [messages, setMessages] = useState([])
   const [counter, setCounter] = useState(3);
+  const [diningHallData, setDiningHallData] = useState("");
+  const [nutritionData, setNutritionData] = useState("");
+
+  
+  const [historySoFar, setHistorySoFar] = useState([ // add history
+]);
+
+async function getNutritionDetails(){
+  fetch('https://api.nal.usda.gov/fdc/v1/foods/search?api_key=wY3vcgA7bZEe53SlGBMsIIXyhWyfeb6Dsj3AjL5j&query=Do they have palak paneer')
+  .then(response => response.text())
+  .then(data => {
+    setNutritionData(nutritionData);
+  })
+  .catch(error => {
+    console.error('An error occurred:', error);
+  });
+}
+
+async function getDiningHallData(){
+  await getNutritionDetails();
+  fetch('https://michigan-dining-api.tendiesti.me/v1/filterableEntries')
+    .then(response => response.text())
+    .then(data => {
+      setDiningHallData(data)
+      setMessages([
+        {
+          _id: 1,
+          text: 'Hello fellow Eatiterator! Give me a moment as I retrieve information about the dining halls.',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://cdn.dribbble.com/userupload/11836407/file/original-8a90883ffdb358883d996e9e6dd4731d.png',
+          },
+        }
+      ])
+      console.log(historySoFar);
+      // "here is a string of all dining hall information, please refer to it for future questions: " + data +
+      runAll( ". Here are acronyms and addresses associated with places on campus in json format." + JSON.stringify(dataset));
+      console.log(diningHallData)
+      // const genAI = new GoogleGenerativeAI("AIzaSyBy6QcQEIsZirBsIGzYO2S4YQ2A08jxPbw");
+      // const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+      // const chat = model.startChat({
+      //   history: historySoFar,
+      //   messages,
+      //   // generationConfig: {
+      //   //   maxOutputTokens: 1000,
+      //   // },
+      // });
+
+    })
+    .catch(error => {
+      setDiningHallData("An error has occurred");
+      console.error('An error occurred:', error);
+    });
+}
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: 'Hello developer',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ])
+    getDiningHallData();
   }, [])
 
   const onSend = useCallback((messages = []) => {
@@ -31,45 +78,35 @@ export default function Chat() {
     runAll(messages[0].text);
   }, [])
   // example data strucure for the messagees
-  // history: [ 
-  //   {
-  //     role: "user",
-  //     parts: [{ text: "Hello, I have 2 dogs in my house." }],
-  //   },
-  //   {
-  //     role: "model",
-  //     parts: [{ text: "Great to meet you. What would you like to know?" }],
-  //   },
-  // ],
 
   async function runAll(data) {
     // For text-and-image input (multimodal), use the gemini-pro-vision model
         try {
             //  = process.env.API_SECRET
-            const genAI = new GoogleGenerativeAI("AIzaSyBy6QcQEIsZirBsIGzYO2S4YQ2A08jxPbw");
+            const genAI = new GoogleGenerativeAI("AIzaSyCjA4ITQDgUA7yfEPbo8SKOJxbObFmcDGg");
             // const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
-            const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+            // const options = {
+            //   RequestOptions: {
+            //     version: "v1beta"
+            //   }
+            // }
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
+            // const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
             const chat = model.startChat({
-                history: [
-                  {
-                    role: "user",
-                    parts: [{ text: "Hello, I have 2 dogs in my house." }],
-                  },
-                  {
-                    role: "model",
-                    parts: [{ text: "Great to meet you. What would you like to know?" }],
-                  },
-                ],
+                history: historySoFar,
                 messages,
-                generationConfig: {
-                  maxOutputTokens: 100,
-                },
+                // generationConfig: {
+                //   maxOutputTokens: 1000,
+                // },
               });
             
             // const msg = "Who am I?";
             console.log(data);
-            const result = await chat.sendMessage(data);
+            // Please reference the json string I provided to you before. That is all real-time current updated information about dining halls on umich campus. Now please answer the following prompt:
+            // ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it your answer with the format <Item> - <Item Details>" +
+            const msg =  data ;
+            const result = await chat.sendMessage(msg);
               const response = await result.response;
               const text = response.text();
               console.log(text);
@@ -90,6 +127,28 @@ export default function Chat() {
               setMessages(previousMessages =>
                 GiftedChat.append(previousMessages, struct),
               )
+
+              setHistorySoFar(historySoFar.concat([
+                {
+                  role: "user",
+                  parts: [{ text: data }],
+                },
+                {
+                  role: "model",
+                  parts: [{ text: text }],
+                },
+              ]));
+
+            //   setHistorySoFar.push([ // add history
+            //   {
+            //     role: "user",
+            //     parts: [{ text: data }],
+            //   },
+            //   {
+            //     role: "model",
+            //     parts: [{ text: text }],
+            //   },
+            // ]);
               // 
             // ...
         } catch (error) {
