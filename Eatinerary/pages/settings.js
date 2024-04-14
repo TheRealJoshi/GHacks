@@ -3,6 +3,15 @@ import { TouchableOpacity, ScrollView, StyleSheet, View, Text } from 'react-nati
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { firebaseConfig, themecolor } from '../config';
+import { getDatabase, ref, setDoc, doc } from "firebase/database";
+import { getAuth } from "firebase/auth";
+
+const auth = getAuth();
+const user = auth.currentUser;
+
+const db = getDatabase();
+
+var totalUserData;
 
 
 export default function Profile() {
@@ -20,8 +29,28 @@ export default function Profile() {
     const userData = 'Please consider the following metrics for the user: Height is ' + height + ' inches, weight is ' + weight + ' pounds, gender is ' + gender + ". ";
     const moreUserData = "These are the preferred macros for the user: Calories is " + calories + " kcal, protein is " + protein + " grams, fat is " + fat + " grams, carbs is " + carbs + " grams. ";
     
-    const totalUserData = userData + moreUserData;
+    totalUserData = userData + moreUserData;
 
+    const saveProfile = async () => {
+      // Add a new document with a generated id.
+
+      const docuRef = doc(db, "userdata", "uid");
+
+      await setDoc(docuRef, {
+        height: height,
+        weight: weight,
+        gender: gender,
+        calories: calories,
+        protein: protein,
+        fat: fat,
+        carbs: carbs,
+      });
+
+
+      console.log("Document written with ID: ", docRef.id);
+    };
+
+    saveProfile();
     // const user = firebase.auth().currentUser;
     // if (user) {
     //   console.log("Saving data for UID:", user.uid, {
@@ -165,6 +194,8 @@ export default function Profile() {
     </ScrollView>
   );
 }
+
+export { totalUserData };
 
 const styles = StyleSheet.create({
   container: {

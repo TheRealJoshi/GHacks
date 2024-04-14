@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View, Button, Image, ScrollView } from 'react-native';
 import  { GoogleGenerativeAI } from "@google/generative-ai"
 import * as ImagePicker from 'expo-image-picker';
+import { totalUserData } from './settings';
 // const fs = require("fs");
 
 export default function Home() {
@@ -140,6 +141,7 @@ export default function Home() {
             <Button title="Upload an image from your camera roll" onPress={pickImage} />
             <TouchableOpacity onPress={() => processImage()} style={{alignContent: 'center', alignItems: 'center'}}>
               <Text style={{}}>Eatinerate!</Text>
+              <Text>{totalUserData}</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
