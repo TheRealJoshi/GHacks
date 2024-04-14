@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import { getFirestore } from 'firebase/firestore';
 
 
 
@@ -26,9 +27,11 @@ const inactiveColor = "#8E8E8E";
 const themecolor = "#0D5C63";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig); // might be outdated check
 }
 
-export { firebaseConfig, tabcolor, inactiveColor, themecolor, app};
+
+export { firebaseConfig, tabcolor, inactiveColor, themecolor, app, db};

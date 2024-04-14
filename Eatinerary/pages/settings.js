@@ -3,13 +3,16 @@ import { TouchableOpacity, ScrollView, StyleSheet, View, Text } from 'react-nati
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
 import { firebaseConfig, themecolor } from '../config';
-import { getDatabase, ref, setDoc, doc } from "firebase/database";
+import { getDatabase, ref } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { db } from '../config';
+import { doc, setDoc } from "firebase/firestore";
+
 
 const auth = getAuth();
-const user = auth.currentUser;
 
-const db = getDatabase();
+
+// const db = getDatabase();
 
 var totalUserData;
 
@@ -33,24 +36,33 @@ export default function Profile() {
 
     const saveProfile = async () => {
       // Add a new document with a generated id.
+      const user = auth.currentUser;
 
-      const docuRef = doc(db, "userdata", "uid");
-
-      await setDoc(docuRef, {
-        height: height,
-        weight: weight,
-        gender: gender,
-        calories: calories,
-        protein: protein,
-        fat: fat,
-        carbs: carbs,
-      });
+      const docRef = doc(db, "userdata", currentUser.uid);
+      try {
+        await setDoc(docRef, {
+          height: height,
+          weight: weight,
+          gender: gender,
+          calories: calories,
+          protein: protein,
+          fat: fat,
+          carbs: carbs
+        });
+        console.log("Profile data saved for user:", currentUser.uid);
+      } catch (error) {
+        console.error("Failed to save profile data:", error);
+      }
 
 
       console.log("Document written with ID: ", docRef.id);
     };
 
-    saveProfile();
+    saveProfile().then(() => {
+      console.log("success for setting")
+    }).catch((error) => {
+      console.log("error for setting")
+    });
     // const user = firebase.auth().currentUser;
     // if (user) {
     //   console.log("Saving data for UID:", user.uid, {
