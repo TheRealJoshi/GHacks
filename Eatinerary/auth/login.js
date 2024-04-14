@@ -159,20 +159,6 @@ function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState(''); 
 
-  const loginUser = () => {
-    // Code to handle user login
-    // After login
-    apiCalendar.handleClientLoad((isLoggedIn) => {
-        if (isLoggedIn) {
-            apiCalendar.listUpcomingEvents(10).then((response) => {
-                // Handle the list of events
-                console.log(response.result.items);
-            }).catch(error => {
-                console.error("Error fetching events:", error);
-            });
-        }
-    });
-};
 
   const handleEmailPasswordLogin = () => {
     console.log("handleEmailPasswordLogin called");

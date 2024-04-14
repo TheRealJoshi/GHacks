@@ -113,7 +113,6 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 const events = [
   { id: 1, name: "GHacks Hackathon", time: "9 – 10:30am", location: "Central Campus Classroom Building" },
@@ -126,16 +125,18 @@ const Schedule = () => {
   const currentDate = new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.date}>{currentDate}</Text>
-      {events.map((event) => (
-        <View key={event.id} style={styles.eventCard}>
-          <Text style={styles.eventName}>{event.name}</Text>
-          <Text style={styles.eventTime}>{event.startTime} - {event.endTime}</Text>
-        
-        </View>
-      ))}
-    </ScrollView>
+      <ScrollView style={styles.eventContainer}>
+        {events.map((event) => (
+          <View key={event.id} style={styles.eventCard}>
+            <Text style={styles.eventName}>{event.name}</Text>
+            <Text style={styles.eventTime}>{event.time}</Text>
+            <Text style={styles.eventLocation}>{event.location}</Text>
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
@@ -143,6 +144,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f0f0f0',
+    paddingTop: 50,
   },
   date: {
     fontSize: 20,
@@ -151,6 +153,10 @@ const styles = StyleSheet.create({
     padding: 10,
     color: '#2A9D8F',
     fontFamily: 'Roboto-Bold', // Ensure the font is correctly linked in your project settings
+  },
+  eventContainer: {
+    flex: 1,
+    marginVertical: 20, // Add margin to create space between the date and events
   },
   eventCard: {
     backgroundColor: '#2A9D8F',
@@ -171,6 +177,10 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   eventTime: {
+    fontSize: 16,
+    color: 'white',
+  },
+  eventLocation: {
     fontSize: 16,
     color: 'white',
   },

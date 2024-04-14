@@ -29,11 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png" 
     },
-    "extra": {
-      "eas": {
-        "projectId": "85844001-0f83-47f2-9a07-9237ed6878be"
-      }
-    },
     "plugins": [
       [
         "@react-native-google-signin/google-signin",
