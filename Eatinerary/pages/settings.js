@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { TouchableOpacity, ScrollView, StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import { firebaseConfig, themecolor } from '../config';
+import { firebaseConfig, themecolor, auth} from '../config';
 import { getDatabase, ref } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import { db } from '../config';
 import { doc, setDoc } from "firebase/firestore";
 
 
-const auth = getAuth();
 
 
 // const db = getDatabase();
@@ -38,7 +37,7 @@ export default function Profile() {
       // Add a new document with a generated id.
       const user = auth.currentUser;
 
-      const docRef = doc(db, "userdata", currentUser.uid);
+      const docRef = doc(db, "userdata", user.uid);
       try {
         await setDoc(docRef, {
           height: height,
@@ -49,7 +48,7 @@ export default function Profile() {
           fat: fat,
           carbs: carbs
         });
-        console.log("Profile data saved for user:", currentUser.uid);
+        console.log("Profile data saved for user:", user.uid);
       } catch (error) {
         console.error("Failed to save profile data:", error);
       }

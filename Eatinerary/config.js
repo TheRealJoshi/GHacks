@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from "firebase/auth";
 
 
 
@@ -28,10 +29,11 @@ const themecolor = "#0D5C63";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig); // might be outdated check
 }
 
 
-export { firebaseConfig, tabcolor, inactiveColor, themecolor, app, db};
+export { firebaseConfig, tabcolor, inactiveColor, themecolor, app, db, auth};
