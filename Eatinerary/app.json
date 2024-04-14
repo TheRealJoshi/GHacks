@@ -11,16 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "scheme": "com.rysjain.Eatinerary",
+    "scheme": "com.example.Eatinerary",
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rysjain.Eatinerary"
+      "bundleIdentifier": "com.example.Eatinerary"
     },
     "android": {
-      "package": "com.rysjain.Eatinerary",
+      "package": "com.example.Eatinerary",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png" 
+    },
+    "extra": {
+      "eas": {
+        "projectId": "85844001-0f83-47f2-9a07-9237ed6878be"
+      }
     },
     "plugins": [
       [
