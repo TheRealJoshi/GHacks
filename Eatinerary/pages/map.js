@@ -127,41 +127,41 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCgc2U0uaEHn70aTUGbnL0KnOgsSG7wst8';
         />
         <Marker
         coordinate={{
-            latitude: location.coords.latitude + 0.0009,
-            longitude: location.coords.longitude - 0.0009,
+            latitude: 42.285060,
+            longitude: -83.730470,
         }}
-        title="UGLI"
-        description="Office Hours"
+        title="CCCB"
+        description="GHacks Hackathon"
         // image={require('../assets/current.png')}
         />
         <Marker
         coordinate={{
-            latitude: location.coords.latitude - 0.0009,
-            longitude: location.coords.longitude + 0.0009,
+            latitude: 42.336320,
+            longitude: -83.732670,
         }}
-        title="Club Meeting"
-        description="Eating over Food"
+        title="Weiser Hall"
+        description="Math Class"
         // image={require('../assets/current.png')}
         />
         <Marker
         coordinate={{
-            latitude: location.coords.latitude - 0.0009,
-            longitude: location.coords.longitude + 0.0039,
+            latitude: 42.275000,
+            longitude: -83.733120,
         }}
-        title="Second Job"
-        description="7 PM"
+        title="Starbucks (South U)"
+        description="Coffee Chat"
         // image={require('../assets/current.png')}
         />
         <Marker
         coordinate={{
-            latitude: location.coords.latitude - 0.004,
-            longitude: location.coords.longitude + 0.009,
+            latitude: 42.281420,
+            longitude: -83.748480,
         }}
-        title="Next spot"
-        description="Work"
+        title="GGBL Building"
+        description="EECS445 Discussion"
         // image={require('../assets/current.png')}
         />
-        <Marker
+        {/* <Marker
         coordinate={{
             latitude: location.coords.latitude - 0.002,
             longitude: location.coords.longitude + 0.001,
@@ -170,9 +170,9 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCgc2U0uaEHn70aTUGbnL0KnOgsSG7wst8';
         description="Work"
         // image={require('./map.png')}
         // style={{height: 30, width:30 }}
-        />
+        /> */}
         
-        <MapViewDirections
+        {/* <MapViewDirections
               origin={{latitude: location.coords.latitude - 0.002,
                 longitude: location.coords.longitude + 0.001}}
               destination={{latitude: location.coords.latitude - 0.004,
@@ -180,7 +180,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCgc2U0uaEHn70aTUGbnL0KnOgsSG7wst8';
               apikey={GOOGLE_MAPS_APIKEY}
               stroke={3}
               strokeColor="hotpink"
-        />
+        /> */}
       {/* {usersMarkers} */}
       </MapView>
     :
