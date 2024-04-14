@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 
+
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,4 +31,4 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig); // might be outdated check
 }
 
-export { firebaseConfig, tabcolor, inactiveColor, themecolor };
+export { firebaseConfig, tabcolor, inactiveColor, themecolor, app};

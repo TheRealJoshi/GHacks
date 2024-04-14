@@ -20,24 +20,35 @@ function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [fullName, setFullName] = useState();
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
 
   const handleSubmit = () => {
+    if (!email || !password || !fullName) {
+      setMessage("Please fill in all fields");
+      setMessageType('error');
+      return; // Stop the function if fields are empty
+    }
+  
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
-        return userCredentials.user.updateProfile({
+        // User was created successfully, now update the profile.
+        userCredentials.user.updateProfile({
           displayName: fullName,
+        }).then(() => {
+          setMessage("Registration complete");
+          setMessageType('success');
+          // Optionally navigate to another screen here
+          // navigation.navigate("Profile", { userId: userCredentials.user.uid });
         });
       })
-      .catch((error) => console.log(error));
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        console.log("user is signed in");
-      } else {
-        console.log("user is not signed in");
-      }
-    });
+      .catch((error) => {
+        console.log(error);
+        setMessage(error.message);
+        setMessageType('error');
+      });
   };
 
   return (
@@ -83,17 +94,18 @@ function RegisterScreen({ navigation }) {
             />
           </View>
         </View>
-        <TouchableOpacity activeOpacity={1} onPress={() => handleSubmit()}>
+        <TouchableOpacity activeOpacity={1} onPress={handleSubmit}>
           <View style={styles.registerButton}>
             <Text style={styles.registerButtonText}>Register</Text>
           </View>
         </TouchableOpacity>
+        {/* Message display */}
+        <Text style={[styles.message, messageType === 'error' ? styles.errorMessage : styles.successMessage]}>
+          {message}
+        </Text>
         <View style={styles.haveAccountContainer}>
           <Text style={styles.haveAccountText}>Have an account?</Text>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => navigation.navigate("Login")}
-          >
+          <TouchableOpacity activeOpacity={1} onPress={() => navigation.navigate("Login")}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -169,6 +181,17 @@ const styles = StyleSheet.create({
     paddingLeft: WP(1),
     fontSize: HP(1.7),
     fontWeight: "bold",
+  },
+  message: {
+    textAlign: 'center',
+    fontSize: HP(2),
+    marginTop: HP(2),
+  },
+  successMessage: {
+    color: 'green',
+  },
+  errorMessage: {
+    color: 'red',
   },
 });
 

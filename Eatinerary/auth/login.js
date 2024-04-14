@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Text,
+  Pressable
 } from "react-native";
 import {
   widthPercentageToDP as WP,
@@ -13,62 +14,169 @@ import {
 } from "react-native-responsive-screen";
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword} from "firebase/auth";
+import  {app } from './../config'
+
 
 import {tabcolor, inactiveColor, themecolor} from './../config'
+
+// import {
+//   GoogleSignin,
+//   GoogleSigninButton,
+//   statusCodes,
+// } from '@react-native-google-signin/google-signin';
+
+
+// GoogleSignin.configure({
+// 	webClientId: "896863488448-0a2oojn8nm6fdnfplt4jnknpcjgaqrrq.apps.googleusercontent.com",
+// 	androidClientId: "896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com",
+// 	iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
+// 	scopes: ['profile', 'email'],
+// });
+
+
+
 
 WebBrowser.maybeCompleteAuthSession();
 // web: 896863488448-0a2oojn8nm6fdnfplt4jnknpcjgaqrrq.apps.googleusercontent.com
 // ios: 896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com
 // android: 896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com
 function LoginScreen({ navigation }) {
+  const provider = new GoogleAuthProvider(app);
+
   // TODO: add google login
+  
+  // const [accessToken, setAccessToken] = useState("");
+  // const [user, setUser] = useState(null);
+  // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+  //   androidClientId: "896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com",
+  //   iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
+  //   webClientId: "896863488448-0a2oojn8nm6fdnfplt4jnknpcjgaqrrq.apps.googleusercontent.com",
+  // });
 
-  const [accessToken, setAccessToken] = useState("");
-  const [user, setUser] = useState(null);
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    androidClientId: "896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com",
-    iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
-    webClientId: "896863488448-0a2oojn8nm6fdnfplt4jnknpcjgaqrrq.apps.googleusercontent.com",
-  });
+  // const handleGoogleLogin = async () => {
+	// 	setLoading(true);
+	// 	try {
+	// 		const response = await GoogleLogin();
+	// 		const { idToken, user } = response;
 
-  useEffect(() => {
-    if(response?.type == "success") {
-      setAccessToken(response.authentication.accessToken);
-      accessToken && fetchUserInfo();
-    }
-  }, [response, accessToken])
+	// 		if (idToken) {
+	// 			const resp = await authAPI.validateToken({
+	// 				token: idToken,
+	// 				email: user.email,
+	// 			});
+	// 			await handlePostLoginData(resp.data);
+	// 		}
+	// 	} catch (apiError) {
+	// 		setError(
+	// 			apiError?.response?.data?.error?.message || 'Something went wrong'
+	// 		);
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
+
+//   googleLogin = async () => {
+//     try {
+//       const result = await Expo.Google.logInAsync({
+//         androidClientId: "896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com",
+//         iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
+//         scopes: ["profile", "email"]
+
+//       })
+//       if (result.type === "success") {
+//         const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken);
+//            firebase.auth().signInAndRetrieveDataWithCredential(credential).then(function(result){
+//              console.log(result);
+//            });
+//    this.props.navigation.navigate('Where you want to go');
+//  } else {
+//    console.log("cancelled")
+//  }
+//     } catch (e) {
+//       console.log("error", e)
+//     }
+// }
+
+
 
   async function fetchUserInfo() {
-    try {
-      let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
-        headers: { Authorization:  'Bearer ${accessToken}' }
-      });
-      const userInfo = await response.json();
-      setUser(userInfo);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   let response = await fetch("https://www.googleapis.com/userinfo/v2/me", {
+    //     headers: { Authorization:  'Bearer ${accessToken}' }
+    //   });
+    //   const userInfo = await response.json();
+    //   setUser(userInfo);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   }
 
 
+  // const [, response, promptAsync] = Google.useIdTokenAuthRequest({
+  //     androidClientId: "896863488448-hbqdi36sh270dcgj9kcpmog67ekm0h4s.apps.googleusercontent.com",
+  //     iosClientId: "896863488448-4cv4i0ivks1sarh7i52tpj8kt8aufd49.apps.googleusercontent.com",
+  //     webClientId: "896863488448-0a2oojn8nm6fdnfplt4jnknpcjgaqrrq.apps.googleusercontent.com",
+  //     scopes: ['openid', 'email', 'https://www.googleapis.com/auth/calendar'],
+  //     responseType: "code",
+  //     accessType: "offline",
+  //   });
+  // useEffect(() => {
+  //   console.log("Google login response received:", response);
+  //   if(response?.type == "success") {
+  //     const { id_token } = response.params;
+  //     console.log("success login", id_token);
+  //     const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
+  //     handleSubmit(credential)
+  //   }
+  // }, [])
+  // const handleSubmit = (credential) => {
+  //   console.log("handle submit");
+  //   const auth = getAuth();
+  //   signInWithPopup(auth, provider)
+  //     .then((userCredential) => {
+  //       // This gives you a Google Access Token. You can use it to access the Google API.
+  //       const credential = GoogleAuthProvider.credentialFromResult(result);
+  //       const token = credential.accessToken;
+  //       // The signed-in user info.
+  //       const user = result.user;
+  //       // IdP data available using getAdditionalUserInfo(result)
+  //       // ...
+  //       navigation.navigate('Profile', { userId: user.uid });
+  //     }).catch((error) => {
+  //       // Handle Errors here.
+  //       const errorCode = error.code;
+  //       const errorMessage = error.message;
+  //       // The email of the user's account used.
+  //       const email = error.customData.email;
+  //       // The AuthCredential type that was used.
+  //       const credential = GoogleAuthProvider.credentialFromError(error);
+  //       // ...
+  //     });
+  // };
 
-//   const handleSubmit = () => {
-//     try {
-//       firebase
-//         .auth()
-//         .signInWithEmailAndPassword(email, password)
-//         .catch((error) => console.log(error));
-//       firebase.auth().onAuthStateChanged(function (user) {
-//         if (user) {
-//           console.log("Signed in!");
-//         } else {
-//           console.log("Not Signed in!");
-//         }
-//       });
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState(''); 
+
+  const handleEmailPasswordLogin = () => {
+    console.log("handleEmailPasswordLogin called");
+    const auth = getAuth();
+  
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        console.log("User signed in:", user);
+        // Navigate to the Profile page or handle the successful login
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("Error signing in:", errorCode, errorMessage);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -87,7 +195,7 @@ function LoginScreen({ navigation }) {
               keyboardType="email-address"
               textContentType="emailAddress"
               style={styles.textColor}
-              onChangeText={(email) => setEmail(email)}
+              onChangeText={setEmail}
             />
           </View>
           <View style={styles.textInput}>
@@ -99,31 +207,28 @@ function LoginScreen({ navigation }) {
               style={styles.textColor}
               placeholderTextColor="#999"
               textContentType="password"
-              onChangeText={(password) => setPassword(password)}
+              onChangeText={setPassword}
             />
           </View>
         </View>
-        <TouchableOpacity activeOpacity={1} onPress={() => fetchUserInfo()}>
+        <TouchableOpacity activeOpacity={1} onPress={handleEmailPasswordLogin}>
           <View style={styles.registerButton}>
             <Text style={styles.registerButtonText}>Login</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={1} onPress={() => promptAsync()}  style={{top: 10}}>
+        {/* <TouchableOpacity activeOpacity={1} onPress={() => {handleEmailPasswordLogin}}  style={{top: 10}}>
           <View style={styles.registerButton}>
             <Text style={styles.registerButtonText}>Log In With Google</Text>
-            {/* <TouchableOpacity
-            onPress={() => {
-              promptAsync();
-            }}/> */}
+            
           </View>
-        </TouchableOpacity>
-        <View style={styles.haveAccountContainer}>
+        </TouchableOpacity> */}
+         <View style={styles.haveAccountContainer}>
           <Text style={styles.haveAccountText}>Don't have an account?</Text>
           {/* TODO: add navigation register */}
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => navigation.navigate("Register")}
-          >
+          > 
             <Text style={styles.registerText}>Register</Text>
           </TouchableOpacity>
         </View>
@@ -199,7 +304,7 @@ const styles = StyleSheet.create({
     color: `${themecolor}`,
     paddingLeft: WP(1),
     fontSize: HP(1.7),
-    fontWeight: "bold",
+    fontWeight: "bold", 
   },
 });
 
