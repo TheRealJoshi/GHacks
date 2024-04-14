@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { TouchableOpacity, ScrollView, StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-import { firebaseConfig } from '../config';
+import { firebaseConfig, themecolor } from '../config';
+
 
 export default function Profile() {
   const { colors } = useTheme();
@@ -15,29 +16,35 @@ export default function Profile() {
   const [carbs, setCarbs] = useState(281);
 
   const handleSave = () => {
-    const user = firebase.auth().currentUser;
-    if (user) {
-      console.log("Saving data for UID:", user.uid, {
-        height,
-        weight,
-        gender,
-        nutrition: { calories, protein, fat, carbs },
-        goal: "Maintenance"
-      });
-      firebase.database().ref(`users/${user.uid}`).set({
-        height,
-        weight,
-        gender,
-        nutrition: { calories, protein, fat, carbs },
-        goal: "Maintenance"
-      }).then(() => {
-        console.log('Profile saved successfully!');
-      }).catch(error => {
-        console.error('Failed to save profile:', error);
-      });
-    } else {
-      console.log('No user is logged in!');
-    }
+
+    const userData = 'Please consider the following metrics for the user: Height is ' + height + ' inches, weight is ' + weight + ' pounds, gender is ' + gender + ". ";
+    const moreUserData = "These are the preferred macros for the user: Calories is " + calories + " kcal, protein is " + protein + " grams, fat is " + fat + " grams, carbs is " + carbs + " grams. ";
+    
+    const totalUserData = userData + moreUserData;
+
+    // const user = firebase.auth().currentUser;
+    // if (user) {
+    //   console.log("Saving data for UID:", user.uid, {
+    //     height,
+    //     weight,
+    //     gender,
+    //     nutrition: { calories, protein, fat, carbs },
+    //     goal: "Maintenance"
+    //   });
+    //   firebase.database().ref(`users/${user.uid}`).set({
+    //     height,
+    //     weight,
+    //     gender,
+    //     nutrition: { calories, protein, fat, carbs },
+    //     goal: "Maintenance"
+    //   }).then(() => {
+    //     console.log('Profile saved successfully!');
+    //   }).catch(error => {
+    //     console.error('Failed to save profile:', error);
+    //   });
+    // } else {
+    //   console.log('No user is logged in!');
+    // }
   };
 
   const updateNutritionByGender = (selectedGender) => {
@@ -70,8 +77,8 @@ export default function Profile() {
         setGender(title);
         updateNutritionByGender(title);
       }}
-      style={[styles.genderButton, { backgroundColor: gender === title ? colors.primary : 'transparent' }]}
-      labelStyle={{ color: gender === title ? 'white' : colors.primary }}
+      style={[styles.genderButton, { backgroundColor: gender === title ? themecolor : 'transparent' }]}
+      labelStyle={{ color: gender === title ? 'white' : themecolor }}
     >
       {title}
     </Button>
@@ -114,6 +121,7 @@ export default function Profile() {
         <Text style={styles.sliderLabel}>Calories: {calories} kcal</Text>
         <Slider
           style={styles.slider}
+          minimumTrackTintColor={themecolor}
           minimumValue={0}
           maximumValue={4000}
           step={100}
@@ -123,6 +131,7 @@ export default function Profile() {
         <Text style={styles.sliderLabel}>Protein: {protein} g</Text>
         <Slider
           style={styles.slider}
+          minimumTrackTintColor={themecolor}
           minimumValue={0}
           maximumValue={300}
           step={10}
@@ -132,6 +141,7 @@ export default function Profile() {
         <Text style={styles.sliderLabel}>Fat: {fat} g</Text>
         <Slider
           style={styles.slider}
+          minimumTrackTintColor={themecolor}
           minimumValue={0}
           maximumValue={100}
           step={5}
@@ -141,12 +151,16 @@ export default function Profile() {
         <Text style={styles.sliderLabel}>Carbs: {carbs} g</Text>
         <Slider
           style={styles.slider}
+          minimumTrackTintColor={themecolor}
           minimumValue={0}
           maximumValue={500}
           step={10}
           value={carbs}
           onValueChange={setCarbs}
         />
+        <TouchableOpacity activeOpacity={1} onPress={handleSave}>
+          <Text style={styles.saveSettings}>Save Settings</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -164,28 +178,37 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
+  saveSettings: {
+    display: 'flex',
+    justifyContent: 'center',
+    textAlign: 'center',
+    color: {themecolor},
+  },
   label: {
     fontSize: 18,
-    color: '#000',
+    color: '#0D5C63',
     marginTop: 10,
     marginBottom: 5,
     fontWeight: 'bold',
   },
   sliderLabel: {
     fontSize: 16,
-    color: '#000',
+    color: {themecolor},
     marginBottom: 5,
   },
   slider: {
+    color: {themecolor},
     width: '100%',
     height: 40,
   },
   genderContainer: {
+    color: '#0D5C63',
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 20,
   },
   genderButton: {
+    color: '#0D5C63',
     flex: 1,
     marginHorizontal: 5,
   },

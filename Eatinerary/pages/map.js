@@ -5,6 +5,7 @@ import Device from 'expo-device';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import {Marker} from 'react-native-maps';
+import {totalUserData} from './settings'
 import {tabcolor} from './../config'
 import {
     AntDesign
