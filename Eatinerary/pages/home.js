@@ -62,31 +62,27 @@ export default function Home() {
     };
 
     async function runAll(data) {
-      // For text-and-image input (multimodal), use the gemini-pro-vision model
-          try {
-              const genAI = new GoogleGenerativeAI("AIzaSyCjA4ITQDgUA7yfEPbo8SKOJxbObFmcDGg");
-              const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
-  
-              const chat = model.startChat({
-                  history: historySoFar,
-                  messages,
-                  generationConfig: {
-                    maxOutputTokens: 1000,
-                  },
-                });
-              console.log(data);
+      try {
+        const genAI = new GoogleGenerativeAI("AIzaSyCjA4ITQDgUA7yfEPbo8SKOJxbObFmcDGg");
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
 
-              const msg =  ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it very SIMPLY and only name a dish or a few dishes matching the criterion. Also, consider my goals as: a vegetarian, 50g protein, 50g carbs. Now this is my request: " + data ;
-              const result = await chat.sendMessage(msg);
-              const response = await result.response;
-              const text = response.text();
-              console.log(text);
+        const chat = model.startChat({
+            history: historySoFar,
+            messages,
+            generationConfig: {
+              maxOutputTokens: 1000,
+            },
+          });
+        console.log(data);
 
-                
-
-          } catch (error) {
-              console.error('An error occurred:', error);
-          }
+        const msg =  ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it very SIMPLY and only name a dish or a few dishes matching the criterion. Also, consider my goals as: a vegetarian, 50g protein, 50g carbs. Now this is my request: " + data ;
+        const result = await chat.sendMessage(msg);
+        const response = await result.response;
+        const text = response.text();
+        console.log(text);
+      } catch (error) {
+          console.error('An error occurred:', error);
+      }
     }
   
     async function fileToGenerativePart(file) {
