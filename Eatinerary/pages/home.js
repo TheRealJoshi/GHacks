@@ -14,7 +14,7 @@ export default function Home() {
     { id: 3, name: "Coffee Chat", time: "1pm - 2pm", location: "Starbucks" },
     { id: 4, name: "EECS445 Discussion", time: "3:30pm - 4:30pm", location: "GGBL Building" },
   ];
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    // const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
     // async function runAll() {
     //     try {
@@ -60,6 +60,34 @@ export default function Home() {
       // setImage(result.assets[0].uri);
       setImage(result.assets[0].base64);
     };
+
+    async function runAll(data) {
+      // For text-and-image input (multimodal), use the gemini-pro-vision model
+          try {
+              const genAI = new GoogleGenerativeAI("AIzaSyCjA4ITQDgUA7yfEPbo8SKOJxbObFmcDGg");
+              const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
+  
+              const chat = model.startChat({
+                  history: historySoFar,
+                  messages,
+                  generationConfig: {
+                    maxOutputTokens: 1000,
+                  },
+                });
+              console.log(data);
+
+              const msg =  ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it very SIMPLY and only name a dish or a few dishes matching the criterion. Also, consider my goals as: a vegetarian, 50g protein, 50g carbs. Now this is my request: " + data ;
+              const result = await chat.sendMessage(msg);
+              const response = await result.response;
+              const text = response.text();
+              console.log(text);
+
+                
+
+          } catch (error) {
+              console.error('An error occurred:', error);
+          }
+    }
   
     async function fileToGenerativePart(file) {
       const base64EncodedDataPromise = new Promise((resolve) => {
@@ -113,9 +141,9 @@ export default function Home() {
                 <Text style={styles.eventLocation}>{event.location}</Text>
               </View>
             ))}
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
+            <Button title="Upload an image from your camera roll" onPress={pickImage} />
             <TouchableOpacity onPress={() => processImage()} style={{alignContent: 'center', alignItems: 'center'}}>
-              <Text>Eatinerate!</Text>
+              <Text style={{}}>Eatinerate!</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -134,7 +162,7 @@ export default function Home() {
       textAlign: 'center',
       padding: 10,
       color: '#2A9D8F',
-      fontFamily: 'Roboto-Bold', // Ensure the font is correctly linked in your project settings
+      // fontFamily: 'Roboto', // Ensure the font is correctly linked in your project settings
     },
     eventContainer: {
       flex: 1,
@@ -151,7 +179,7 @@ export default function Home() {
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 5,
-      fontFamily: 'Roboto-Regular', // Ensure the font is correctly linked in your project settings
+      // fontFamily: '', // Ensure the font is correctly linked in your project settings
     },
     eventName: {
       fontSize: 18,
