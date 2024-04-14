@@ -158,6 +158,7 @@ async function getDiningHallData(){
     return (
       <GiftedChat
       messages={messages}
+      style={{ backgroundColor:'#fff'}}
       onSend={messages => {
         onSend(messages)
         // runAll();

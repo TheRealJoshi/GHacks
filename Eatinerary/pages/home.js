@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react'
 // import { genAI } from "./../gemini/common";
 // const { GoogleGenerativeAI } = require("@google/generative-ai");
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
 import  { GoogleGenerativeAI } from "@google/generative-ai"
+import * as ImagePicker from 'expo-image-picker';
 // const fs = require("fs");
 
 export default function Home() {
@@ -31,68 +33,78 @@ export default function Home() {
 
     // Access your API key as an environment variable (see "Set up your API key" above)
 
+    const [imageB, setImage] = useState(null);
 
-    // Converts local file information to a GoogleGenerativeAI.Part object.
-    // function fileToGenerativePart(path, mimeType) {
-    // return {
-    //     inlineData: {
-    //     data: Buffer.from(fs.readFileSync(path)).toString("base64"),
-    //     mimeType
-    //     },
-    // };
-    // }
+    const pickImage = async () => {
+      // No permissions request is necessary for launching the image library
+      const options = { base64: true };
+      let result = await ImagePicker.launchImageLibraryAsync(options, {
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-    // function fileToGenerativePart(file) {
-    //     return new Promise((resolve, reject) => {
-    //       const reader = new FileReader();
-      
-    //       reader.onload = function() {
-    //         // result attribute contains the data as a base64-encoded string
-    //         resolve({
-    //           inlineData: {
-    //             data: reader.result.split(',')[1], // Remove the Data URI scheme prefix
-    //             mimeType: file.type
-    //           }
-    //         });
-    //       };
-      
-    //       reader.onerror = reject;
-      
-    //       reader.readAsDataURL(file); // Read the file's content as a Data URL
-    //     });
-    //   }
-    // async function fileToGenerativePart(file) {
-    //     const base64EncodedDataPromise = new Promise((resolve) => {
-    //       const reader = new FileReader();
-    //       reader.onloadend = () => resolve(reader.result.split(',')[1]);
-    //       reader.readAsDataURL(file);
-    //     });
-    //     return {
-    //       inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
-    //     };
-    //   }
-    //   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+      // console.log(result.assets[0].base64);
+      // if (!result.cancelled) {
+        // const base64EncodedImage = await fileToBase64(result.uri);
+        // console.log(base64EncodedImage);
+      // }
+      // setImage(result.assets[0].uri);
+      setImage(result.assets[0].base64);
+    };
+  
+    async function fileToGenerativePart(file) {
+      const base64EncodedDataPromise = new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.readAsDataURL(file);
+      });
+      return {
+        inlineData: { data: await base64EncodedDataPromise, mimeType: file.type },
+      };
+    }
+  
+    async function processImage(given) {
+      try {
+        const genAI = new GoogleGenerativeAI("AIzaSyBy6QcQEIsZirBsIGzYO2S4YQ2A08jxPbw");
+  
+        // const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+    
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
+        
+    
+        const prompt = "What is the most optimal path for this schedule? Consider it like the travelling salesman problem where every red marker is a location to be visited.";
+        // const image = fileToGenerativePart("./lemonade.png");
+    
+        const image = {
+          inlineData: {
+            data: imageB,
+            mimeType: "image/png",
+          },
+        };
+        
+        const result = await model.generateContent([prompt, image]);
+        // const result = await model.generateContent([prompt, imageB]);
 
-    // const prompt = "What's different between these pictures?";
+        console.log(result.response.text());
 
-    // const imageParts = [
-    //     fileToGenerativePart("image1.png", "image/png"),
-    //     fileToGenerativePart("image2.jpeg", "image/jpeg"),
-    // ];
-
-    // const result = await model.generateContent([prompt, ...imageParts]);
-    // const response = await result.response;
-    // const text = response.text();
-    // console.log(text);
-
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
 
     return (
       <View style={styles.container}>
         <Text>Open up App.js to start working on your app!</Text>
-        <TouchableOpacity onPress={() => runAll()}>
+        <TouchableOpacity onPress={() => processImage()}>
             <Text>Run Gemini</Text>
         </TouchableOpacity>
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {/* {image && <Image source={{ uri: image }} style={styles.image} />}
         <StatusBar style="auto" />
+        <Text>{image}</Text> */}
       </View>
     );
   }

@@ -11,6 +11,7 @@ import {
   FontAwesome5,
   Ionicons
 } from "@expo/vector-icons";
+import Map from './pages/map'
 import Home from './pages/home';
 import Settings from './pages/settings';
 import Registration from './pages/registration';
@@ -39,14 +40,14 @@ function HomeStack() {
 function MapStack() {
   return (
     <RegistrationNav.Navigator>
-      <RegistrationNav.Screen name="Registration" component={Registration} />
+      <RegistrationNav.Screen name="Map" component={Map} />
     </RegistrationNav.Navigator>
   );
 }
 function ChatStack() {
   return (
     <RegistrationNav.Navigator>
-      <RegistrationNav.Screen name="Chat Stack" component={Registration} />
+      <RegistrationNav.Screen name="Chat" component={Registration} />
     </RegistrationNav.Navigator>
   );
 }
@@ -72,7 +73,7 @@ export default function App() {
 
 
   // var authState = true;
-  var authState = true;
+  var authState = false;
 
   return (
     authState ? (
@@ -115,7 +116,7 @@ export default function App() {
             ),
           }}
           />
-          <Tab.Screen name="Map" component={MapStack} 
+          <Tab.Screen name="Map Stack" component={MapStack} 
           options={{
             tabBarIcon: ({ focused }) => (
               <FontAwesome5
@@ -126,7 +127,7 @@ export default function App() {
             ),
           }}
           />
-          <Tab.Screen name="Chat" component={ChatStack} 
+          <Tab.Screen name="Chat Stack" component={ChatStack} 
           options={{
             tabBarIcon: ({ focused }) => (
               <Entypo
