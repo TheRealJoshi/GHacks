@@ -11,27 +11,20 @@ import {
   FontAwesome5,
   Ionicons
 } from "@expo/vector-icons";
-
-
-
 import Home from './pages/home';
 import Settings from './pages/settings';
 import Registration from './pages/registration';
 import Notifications from './pages/notifications';
 import Profile from './pages/profile';
-
 import Login from './auth/login';
 import Register from './auth/register';
 import Splash from './auth/splash';
-
 const HomeNav = createStackNavigator();
 const AuthNav = createStackNavigator();
 const RegistrationNav = createStackNavigator();
 const SettingsNav = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
-
 import {tabcolor, inactiveColor, themecolor} from './config'
-
 
 function HomeStack() {
   return (
@@ -43,7 +36,6 @@ function HomeStack() {
     </HomeNav.Navigator>
   );
 }
-
 function MapStack() {
   return (
     <RegistrationNav.Navigator>
@@ -51,7 +43,6 @@ function MapStack() {
     </RegistrationNav.Navigator>
   );
 }
-
 function ChatStack() {
   return (
     <RegistrationNav.Navigator>
@@ -59,7 +50,6 @@ function ChatStack() {
     </RegistrationNav.Navigator>
   );
 }
-
 function SettingsStack() {
   return (
     <SettingsNav.Navigator>
@@ -67,24 +57,21 @@ function SettingsStack() {
     </SettingsNav.Navigator>
   );
 }
-
 export default function App() {
   // const [initializing, setInitializing] = useState(true);
   // const [user, setUser] = useState(); // Handle user state changes
-
   // function onAuthStateChanged(user) {
   //   setUser(user);
   //   if (initializing) setInitializing(false);
   // }
-
   // useEffect(() => {
   //   const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
   //   return subscriber; // unsubscribe on unmount
   // }, []);
-
   // if (initializing) return null;
 
 
+  // var authState = true;
   var authState = true;
 
   return (
@@ -100,6 +87,7 @@ export default function App() {
           <AuthNav.Screen name="Login" component={Login} />
           <AuthNav.Screen name="Register" component={Register} />
           <AuthNav.Screen name="Home" component={Home} />
+          <AuthNav.Screen name="Profile" component={Profile} />
         </AuthNav.Navigator>
       </NavigationContainer>
     ) : (
@@ -165,7 +153,6 @@ export default function App() {
     )
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -174,10 +161,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
 // import { StatusBar } from 'expo-status-bar';
 // import { StyleSheet, Text, View } from 'react-native';
-
 // export default function Login() {
 //     return (
 //       <View style={styles.container}>
@@ -195,4 +180,3 @@ const styles = StyleSheet.create({
 //       justifyContent: 'center',
 //     },
 //   });
-  

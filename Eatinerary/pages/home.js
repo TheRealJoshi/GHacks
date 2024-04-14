@@ -1,12 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
 // import { genAI } from "./../gemini/common";
 // const { GoogleGenerativeAI } = require("@google/generative-ai");
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import  { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import CalendarScreen from '../gcal';
+import { fetchData } from '../gcal';
 // const fs = require("fs");
 
 export default function Home() {
-    const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+    // const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+    const [showCalendar, setShowCalendar] = useState(false);
+
+    const toggleCalendar = async () => {
+      setShowCalendar(!showCalendar)
+      // if (!showCalendar) {
+      //   // Call fetchCalendarData when showCalendar is set to true
+      //   await fetchData();
+      // }
+    };
 
     // async function runAll() {
     //     try {
@@ -86,16 +99,31 @@ export default function Home() {
     // console.log(text);
 
 
+    // return (
+    //   <View style={styles.container}>
+    //     <Text>Open up App.js to start working on your app!</Text>
+    //     <TouchableOpacity onPress={() => runAll()}>
+    //         <Text>Run Geminii</Text>
+    //         <TouchableOpacity onPress={toggleCalendar}>
+    //           <Text>Show Calendar</Text>
+    //         </TouchableOpacity>
+    //     </TouchableOpacity>
+    //     <StatusBar style="auto" />
+    //   </View>
+    // );
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <TouchableOpacity onPress={() => runAll()}>
-            <Text>Run Gemini</Text>
-        </TouchableOpacity>
-        <StatusBar style="auto" />
+        {showCalendar ? (
+          <CalendarScreen /> // Display the CalendarScreen component when showCalendar is true
+        ) : (
+          <><Text>Welcome to the Home Page!</Text><TouchableOpacity onPress={toggleCalendar}>
+              <Text>Show Calendar</Text>
+            </TouchableOpacity></>
+        )}
       </View>
     );
-  }
+
+  };
   
   const styles = StyleSheet.create({
     container: {

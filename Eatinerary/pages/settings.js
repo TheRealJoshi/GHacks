@@ -1,25 +1,77 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import { TouchableOpacity, ScrollView, StyleSheet, View, Text } from 'react-native';
 import { TextInput, Button, useTheme } from 'react-native-paper';
 import Slider from '@react-native-community/slider';
-
+import { firebaseConfig } from '../config';
 
 export default function Profile() {
   const { colors } = useTheme();
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [gender, setGender] = useState('Male');
-  const [calories, setCalories] = useState(2000);
-  const [protein, setProtein] = useState(50);
-  const [fat, setFat] = useState(20);
-  const [carbs, setCarbs] = useState(100);
+  const [calories, setCalories] = useState(2500);
+  const [protein, setProtein] = useState(56);
+  const [fat, setFat] = useState(56);
+  const [carbs, setCarbs] = useState(281);
+
+  const handleSave = () => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      console.log("Saving data for UID:", user.uid, {
+        height,
+        weight,
+        gender,
+        nutrition: { calories, protein, fat, carbs },
+        goal: "Maintenance"
+      });
+      firebase.database().ref(`users/${user.uid}`).set({
+        height,
+        weight,
+        gender,
+        nutrition: { calories, protein, fat, carbs },
+        goal: "Maintenance"
+      }).then(() => {
+        console.log('Profile saved successfully!');
+      }).catch(error => {
+        console.error('Failed to save profile:', error);
+      });
+    } else {
+      console.log('No user is logged in!');
+    }
+  };
+
+  const updateNutritionByGender = (selectedGender) => {
+    switch (selectedGender) {
+      case 'Male':
+        setCalories(2500);
+        setProtein(56);
+        setFat(56);
+        setCarbs(281);
+        break;
+      case 'Female':
+        setCalories(2000);
+        setProtein(46);
+        setFat(44);
+        setCarbs(225);
+        break;
+      default:
+        setCalories(2000); 
+        setProtein(50);
+        setFat(20);
+        setCarbs(100);
+        break;
+    }
+  };
 
   const GenderButton = ({ title }) => (
     <Button
       mode={gender === title ? 'contained' : 'outlined'}
-      onPress={() => setGender(title)}
-      style={styles.genderButton}
-      labelStyle={gender === title ? { color: 'white' } : { color: colors.primary }}
+      onPress={() => {
+        setGender(title);
+        updateNutritionByGender(title);
+      }}
+      style={[styles.genderButton, { backgroundColor: gender === title ? colors.primary : 'transparent' }]}
+      labelStyle={{ color: gender === title ? 'white' : colors.primary }}
     >
       {title}
     </Button>
@@ -72,7 +124,7 @@ export default function Profile() {
         <Slider
           style={styles.slider}
           minimumValue={0}
-          maximumValue={900}
+          maximumValue={300}
           step={10}
           value={protein}
           onValueChange={setProtein}
@@ -96,34 +148,11 @@ export default function Profile() {
           onValueChange={setCarbs}
         />
       </View>
-      <View style={styles.container}>
-      <Button
-        mode="contained"
-        onPress={() => console.log('Data Saved')}
-        style={styles.button}
-        labelStyle={styles.buttonText}
-      >
-        Save Profile
-      </Button>
-    </View>
-
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#6200ee',  // Example: Purple color
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 4,
-    elevation: 3,  // Shadow for Android
-  },
-  buttonText: {
-    color: '#FFFFFF',  // Ensuring text color is white for better readability
-    fontSize: 16,
-    lineHeight: 26,  // Increasing line height for better text alignment
-  },
   container: {
     flex: 1,
     padding: 10,

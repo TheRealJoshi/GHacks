@@ -17,8 +17,9 @@ import * as Google from 'expo-auth-session/providers/google';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword} from "firebase/auth";
 import  {app } from './../config'
 
+import {tabcolor, inactiveColor, themecolor} from './../config';
+import apiCalendar from 'react-google-calendar-api';
 
-import {tabcolor, inactiveColor, themecolor} from './../config'
 
 // import {
 //   GoogleSignin,
@@ -158,18 +159,35 @@ function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState(''); 
 
+  const loginUser = () => {
+    // Code to handle user login
+    // After login
+    apiCalendar.handleClientLoad((isLoggedIn) => {
+        if (isLoggedIn) {
+            apiCalendar.listUpcomingEvents(10).then((response) => {
+                // Handle the list of events
+                console.log(response.result.items);
+            }).catch(error => {
+                console.error("Error fetching events:", error);
+            });
+        }
+    });
+};
+
   const handleEmailPasswordLogin = () => {
     console.log("handleEmailPasswordLogin called");
     const auth = getAuth();
   
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then((userCredential) => {             
+        ``
+        // apiCalendar.listUpcomingEvents(10);
         // Signed in 
         const user = userCredential.user;
         console.log("User signed in:", user);
         // Navigate to the Profile page or handle the successful login
-        navigation.navigate("Home");
-      })
+        navigation.navigate("Profile");
+      })      
       .catch((error) => {
         // Handle Errors here.
         const errorCode = error.code;
