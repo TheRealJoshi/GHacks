@@ -17,7 +17,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword} from "firebase/auth";
 import  {app } from './../config'
 // import { useAuth } from "./../pages/context"
-import {tabcolor, inactiveColor, themecolor} from './../pages/context';
+import {tabcolor, inactiveColor, themecolor} from './../config';
 import apiCalendar from 'react-google-calendar-api';
 
 

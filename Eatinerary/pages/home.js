@@ -2,12 +2,18 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react'
 // import { genAI } from "./../gemini/common";
 // const { GoogleGenerativeAI } = require("@google/generative-ai");
-import { StyleSheet, Text, TouchableOpacity, View, Button, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Button, Image, ScrollView } from 'react-native';
 import  { GoogleGenerativeAI } from "@google/generative-ai"
 import * as ImagePicker from 'expo-image-picker';
 // const fs = require("fs");
 
 export default function Home() {
+  const events = [
+    { id: 1, name: "GHacks Hackathon", time: "9 – 10:30am", location: "Central Campus Classroom Building" },
+    { id: 2, name: "Math Class", time: "11am - 12pm", location: "Weiser Hall" },
+    { id: 3, name: "Coffee Chat", time: "1pm - 2pm", location: "Starbucks" },
+    { id: 4, name: "EECS445 Discussion", time: "3:30pm - 4:30pm", location: "GGBL Building" },
+  ];
     const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
     // async function runAll() {
@@ -34,6 +40,7 @@ export default function Home() {
     // Access your API key as an environment variable (see "Set up your API key" above)
 
     const [imageB, setImage] = useState(null);
+    const currentDate = new Date().toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
     const pickImage = async () => {
       // No permissions request is necessary for launching the image library
@@ -95,17 +102,23 @@ export default function Home() {
     }
   
 
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <TouchableOpacity onPress={() => processImage()}>
-            <Text>Run Gemini</Text>
-        </TouchableOpacity>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {/* {image && <Image source={{ uri: image }} style={styles.image} />}
-        <StatusBar style="auto" />
-        <Text>{image}</Text> */}
-      </View>
+    return (        
+        <View style={styles.container}>
+          <Text style={styles.date}>{currentDate}</Text>
+          <ScrollView style={styles.eventContainer}>
+            {events.map((event) => (
+              <View key={event.id} style={styles.eventCard}>
+                <Text style={styles.eventName}>{event.name}</Text>
+                <Text style={styles.eventTime}>{event.time}</Text>
+                <Text style={styles.eventLocation}>{event.location}</Text>
+              </View>
+            ))}
+            <Button title="Pick an image from camera roll" onPress={pickImage} />
+            <TouchableOpacity onPress={() => processImage()} style={{alignContent: 'center', alignItems: 'center'}}>
+              <Text>Eatinerate!</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
     );
   }
   
@@ -113,8 +126,44 @@ export default function Home() {
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+      paddingTop: 50,
+    },
+    date: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      padding: 10,
+      color: '#2A9D8F',
+      fontFamily: 'Roboto-Bold', // Ensure the font is correctly linked in your project settings
+    },
+    eventContainer: {
+      flex: 1,
+      marginVertical: 20, // Add margin to create space between the date and events
+    },
+    eventCard: {
+      backgroundColor: '#2A9D8F',
+      borderRadius: 10,
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+      fontFamily: 'Roboto-Regular', // Ensure the font is correctly linked in your project settings
+    },
+    eventName: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: 'white',
+    },
+    eventTime: {
+      fontSize: 16,
+      color: 'white',
+    },
+    eventLocation: {
+      fontSize: 16,
+      color: 'white',
     },
   });
-  

@@ -27,8 +27,11 @@ const SettingsNav = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 // import { AuthProvider, useAuth } from "./pages/context";
 
+
 import {tabcolor, inactiveColor, themecolor} from './config'
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+
+console.disableYellowBox = true;
 
 function HomeStack() {
   return (

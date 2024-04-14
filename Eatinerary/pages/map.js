@@ -14,6 +14,56 @@ import {
 export default function App() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [data, setData] = useState(null);
+
+  async function runAll(data) {
+    // For text-and-image input (multimodal), use the gemini-pro-vision model
+        try {
+            //  = process.env.API_SECRET
+            const genAI = new GoogleGenerativeAI("AIzaSyCjA4ITQDgUA7yfEPbo8SKOJxbObFmcDGg");
+            // const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+            // const options = {
+            //   RequestOptions: {
+            //     version: "v1beta"
+            //   }
+            // }
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest"}, { apiVersion: "v1beta" });
+            // const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+            const chat = model.startChat({
+                history: historySoFar,
+                messages,
+                generationConfig: {
+                  maxOutputTokens: 1000,
+                },
+              });
+            
+            // const msg = "Who am I?";
+            console.log(data);
+            // Please reference the json string I provided to you before. That is all real-time current updated information about dining halls on umich campus. Now please answer the following prompt:
+            
+            const msg =  ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it very SIMPLY and only name a dish or a few dishes matching the criterion. Also, consider my goals as: a vegetarian, 50g protein, 50g carbs. Now this is my request: " + data ;
+            const result = await chat.sendMessage(msg);
+              const response = await result.response;
+              const text = response.text();
+              console.log(text);
+              setCounter(counter + 1);
+              console.log("responses length is " + messages.length);
+              const struct = [{
+                _id: Math.random().toString(36).substring(7),
+                text: text,
+                createdAt: new Date(),
+                user: {
+                  _id: 2,
+                  name: 'React Native',
+                  avatar: 'https://placeimg.com/140/140/any',
+                },
+              },]
+              
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    }
 
   useEffect(() => {
     (async () => {
@@ -117,7 +167,8 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCgc2U0uaEHn70aTUGbnL0KnOgsSG7wst8';
         }}
         title="Next spot"
         description="Work"
-        image={require('./map.png')}
+        // image={require('./map.png')}
+        // style={{height: 30, width:30 }}
         />
         
         <MapViewDirections

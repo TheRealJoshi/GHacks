@@ -46,7 +46,7 @@ async function getDiningHallData(){
       ])
       console.log(historySoFar);
       // "here is a string of all dining hall information, please refer to it for future questions: " + data +
-      runAll( ". Here are acronyms and addresses associated with places on campus in json format." + JSON.stringify(dataset));
+      runAll(data + ". Here are acronyms and addresses associated with places on campus in json format." + JSON.stringify(dataset));
       console.log(diningHallData)
       // const genAI = new GoogleGenerativeAI("AIzaSyBy6QcQEIsZirBsIGzYO2S4YQ2A08jxPbw");
       // const model = genAI.getGenerativeModel({ model: "gemini-pro"});
@@ -96,16 +96,16 @@ async function getDiningHallData(){
             const chat = model.startChat({
                 history: historySoFar,
                 messages,
-                // generationConfig: {
-                //   maxOutputTokens: 1000,
-                // },
+                generationConfig: {
+                  maxOutputTokens: 1000,
+                },
               });
             
             // const msg = "Who am I?";
             console.log(data);
             // Please reference the json string I provided to you before. That is all real-time current updated information about dining halls on umich campus. Now please answer the following prompt:
-            // ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it your answer with the format <Item> - <Item Details>" +
-            const msg =  data ;
+            
+            const msg =  ". Please list everything out and do not hallucinate from any information other than what I have provided. Be concise and do not add any extra information." + "List it very SIMPLY and only name a dish or a few dishes matching the criterion. Also, consider my goals as: a vegetarian, 50g protein, 50g carbs. Now this is my request: " + data ;
             const result = await chat.sendMessage(msg);
               const response = await result.response;
               const text = response.text();
